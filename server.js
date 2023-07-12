@@ -3,7 +3,6 @@ const app = express();
 const port = 3000;
 require("dotenv").config();
 const { query } = require("./database");
-const { ValidationErrorItemType } = require("sequelize");
 
 //middleware
 app.use((req, res, next) => {
@@ -78,16 +77,16 @@ app.post("/book/", async (req, res) => {
   }
 });
 // delete a book from the database
-app.delete("/book/del", async (req, res) => {
+app.delete("/book/:id", async (req, res) => {
   const isbn13 = req.params.id;
   try {
     const deleteQuery = await query(`DELETE FROM books WHERE isbn13 = $1`, [
       isbn13,
     ]);
     if (deleteQuery.rowCount > 0) {
-      res.status(200).send({ message: "Job deleted successfully" });
+      res.status(200).send({ message: "Book deleted successfully" });
     } else {
-      res.status(404).send({ message: "Job not found" });
+      res.status(404).send({ message: "Book not found" });
     }
   } catch (error) {}
 });
